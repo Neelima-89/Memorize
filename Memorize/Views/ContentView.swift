@@ -11,21 +11,13 @@ struct ContentView: View {
     @State var themeType = ThemeType.vehicles
     var body: some View {
         VStack {
-            Text("Memorize!").font(.largeTitle)
             ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 0)], spacing: 0) {
                     ForEach(themeType.emojis.indices, id: \.self) { index in
                         CardView(content: themeType.emojis[index])
+                            .padding(5)
+                            .aspectRatio(2/3, contentMode: .fill)
                     }
-                }
-                .font(.largeTitle)
-                .aspectRatio(2/3, contentMode: .fill)
-            }
-            HStack(alignment: .bottom, spacing: 60) {
-                ForEach(0..<ThemeType.allCases.count) { index in
-                    Theme(action: {
-                        setTheme(of: index)
-                    }, icon: ThemeType.allCases[index].icon, text: ThemeType.allCases[index].title)
                 }
             }
         }
