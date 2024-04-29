@@ -7,17 +7,13 @@
 
 import Foundation
 
-enum CardProperty: Int {
-    case isFaceUp
-    case isMatched
-}
-
 struct EmojiGame<Content> where Content: Equatable {
     init(noOfPairs: Int, contentFactory: (Int) -> Content) {
         for index in 0..<noOfPairs {
             cards.append(Card(id: "\(index)a", content: contentFactory(index)))
             cards.append(Card(id: "\(index)b", content: contentFactory(index)))
         }
+        shuffle()
     }
     struct Card: Equatable, Identifiable, CustomStringConvertible {
         let id: String
@@ -37,35 +33,21 @@ struct EmojiGame<Content> where Content: Equatable {
         }
     }
     private func getIndex(of card: Card) -> Int? {
-        cards.firstIndex(of: card)
-    }
-    mutating private func toggleProperty(for cards: [Card], property: CardProperty) {
-        for card in cards {
-            if let index =  getIndex(of: card) {
-                if property == .isMatched {
-                    self.cards[index].isMatched.toggle()
-                } else {
-                    self.cards[index].isFaceUp.toggle()
-                }
-            }
-        }
+        cards.firstIndex { $0.id == card.id }
     }
     
     mutating func shuffle() {
         cards.shuffle()
     }
     mutating func chooseCard(_ card: Card) {
-        if let index = cards.firstIndex(where: { $0.id == card.id }) {
-            if !cards[index].isFaceUp, !cards[index].isMatched {
-                if let faceUpIndex = onlyCardWithFaceUp {
-                    if cards[index].content == cards[faceUpIndex].content {
+        if let index = cards.firstIndex(of: card) {
+            if !cards[index].isFaceUp && !cards[index].isMatched {
+                if let faceUpCardIndex = onlyCardWithFaceUp  {
+                    if cards[index].content == cards[faceUpCardIndex].content {
                         cards[index].isMatched = true
-                        cards[faceUpIndex].isMatched = true
+                        cards[faceUpCardIndex].isMatched = true
                     }
                 } else {
-                    for index in cards.indices {
-                        cards[index].isFaceUp = false
-                    }
                     onlyCardWithFaceUp = index
                 }
                 cards[index].isFaceUp = true

@@ -7,54 +7,36 @@
 
 import SwiftUI
 
-struct Theme: View {
-    var action: () -> Void
-    var icon: String
-    var text: String
-    var body: some View {
-        Button(action: action) {
-            VStack {
-                Image(systemName: icon)
-                    .font(.title)
-                    .imageScale(.large)
-                Text(text)
-                    .font(.system(size: 10))
-            }
-        }
-    }
-}
-
-struct Theme_Previews: PreviewProvider {
-    static var previews: some View {
-        Theme(action: {}, icon: "car", text: "Vehicles")
-    }
-}
-
-enum ThemeType: Int, CaseIterable {
+enum Theme: Int, CaseIterable {
     case vehicles
     case food
     case games
+    case flags
+    case animals
+    case symbols
     
     var emojis: [String] {
         switch self {
-        case .food: return ["🍎","🥐","🍞","🧅","🍨","🍫","🥐","🍨","🍫","🧅","🍞","🍎"].shuffled()
-        case .games: return ["⚽️","🏀","⚾️","🏈","🎾","🏐","🎾","🎱","🏐","⚾️","🏈","⚽️","🎱","🏀"].shuffled()
-        case .vehicles:
-            return ["🚗","🚲","🚄","🚊","🚁","🛳","🚊","🚄","🚊","🚲","🚗","🚁"].shuffled()
+        case .food: return ["🍎","🥐","🍞","🧅","🍨","🍫","🥗","🌮","🍟","🍕","🥨"]
+        case .games: return ["⚽️","🏀","⚾️","🏈","🎾","🏐","🪀","🎱","🥏","🛝","🛷","🛼","⛸"]
+        case .vehicles: return ["🚗","🚲","🚄","🚊","🚁","🛳","🚀","🛩","🚆","🚝","🚄","🚈"]
+        case .flags: return ["🇦🇽","🇿🇦","🇮🇳","🇬🇭","🇧🇮","🇨🇦","🇰🇭","🚩","🇧🇭","🇦🇫"]
+        case .animals: return ["🐶","🐱","🐭","🐯","🦁","🐮","🐷","🐸","🐻‍❄️","🐵"]
+        case .symbols: return ["☯️","❤️","💘","❤️‍🩹","❤️‍🔥","💔","🆘","♠️","💤","🆒"]
+            
         }
     }
-    var icon: String {
-        switch self {
-        case .vehicles: return "car"
-        case .food: return "fork.knife.circle"
-        case .games: return "gamecontroller"
-        }
+    var noOfCardPairs: Int {
+        return 8
     }
-    var title: String {
+    var color: Color {
         switch self {
-        case .vehicles: return "Vehicles"
-        case .food: return "Food"
-        case .games: return "Games"
+        case .vehicles: return .cyan
+        case .food: return .green
+        case .games: return .purple
+        case .flags: return .red
+        case .animals: return .orange
+        case .symbols: return .yellow
         }
     }
 }

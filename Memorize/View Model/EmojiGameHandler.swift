@@ -8,11 +8,19 @@
 import Foundation
 
 class EmojiGameHandler: ObservableObject {
-    init() {
-        game.shuffle()
+    init(_ theme: Theme) {
+        self.theme = theme
+        self.game = EmojiGame(noOfPairs: theme.noOfCardPairs) { index -> String  in
+            return theme.emojis[index]
+        }
     }
-    @Published private var game = EmojiGame(noOfPairs: 8) { index -> String  in
-        return ["🇦🇽","🇿🇦","🇮🇳","🇬🇭","🇧🇮","🇨🇦","🇰🇭","🚩","🇧🇭","🇦🇫"][index]
+    @Published private var game: EmojiGame<String>
+    var theme: Theme {
+        didSet {
+            game = EmojiGame(noOfPairs: 5) { index -> String  in
+                return theme.emojis[index]
+            }
+        }
     }
     var cards: [EmojiGame<String>.Card] {
         game.cards

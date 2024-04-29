@@ -10,18 +10,29 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var handler: EmojiGameHandler
     var body: some View {
-        VStack {
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), spacing: 0)], spacing: 0) {
-                    ForEach(handler.cards) { card in
-                        CardView(card: card)
-                            .padding(5)
-                            .aspectRatio(2/3, contentMode: .fill)
-                            .onTapGesture {
-                                handler.chooseCard(card)
-                            }
-                            .opacity(card.isMatched ? 0 : 1)
+        NavigationView {
+            VStack {
+                ScrollView {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 85), spacing: 0)], spacing: 0) {
+                        ForEach(handler.cards) { card in
+                            CardView(card: card)
+                                .padding(5)
+                                .aspectRatio(2/3, contentMode: .fill)
+                                .onTapGesture {
+                                    handler.chooseCard(card)
+                                }
+                                .foregroundColor(handler.theme.color)
+                        }
                     }
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {
+                        handler.theme = Theme(rawValue: Int.random(in: Theme.allCases.indices)) ?? .food
+                    }, label: {
+                        Image(systemName: "plus")
+                    })
                 }
             }
         }
@@ -31,7 +42,7 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(handler: EmojiGameHandler())
+        ContentView(handler: EmojiGameHandler(Theme.food))
     }
 }
 
